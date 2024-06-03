@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Shoti Videos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    #title {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 36px;
+      color: #8be9fd;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      font-weight: 600;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    #video-container {
+      max-width: 600px;
+      width: 90%;
+      margin: 20px auto;
+      background: linear-gradient(145deg, #282828, #3c3c3c);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      animation: fadeInUp 1s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #loading-spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #03dac6;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite, bounce 0.5s alternate infinite;
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    #progress-bar-container {
+      width: 100%;
+      background-color: #333;
+      border-radius: 20px;
+      overflow: hidden;
+      display: none;
+    }
+
+    #progress-bar {
+      width: 0%;
+      height: 8px;
+      background-color: #03dac6;
+      transition: width 0.5s ease;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-15px); }
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 20px;
+    }
+
+    #error-message {
+      color: #ff5555;
+      font-size: 18px;
+      margin-top: 10px;
+      display: none;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #retry-button {
+      background-color: #ff79c6;
+      color: #121212;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 12px 24px;
+      margin-top: 10px;
+      transition: background-color 0.3s, transform 0.3s, opacity 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      font-weight: 600;
+      display: none;
+      opacity: 0;
+    }
+
+    #retry-button:hover {
+      background-color: #ff92d1;
+      transform: scale(1.1);
+    }
+
+    #video-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      animation: fadeInUp 1s ease-out;
+      width: 100%;
+    }
+
+    #video-controls button {
+      background-color: #03dac6;
+      color: #121212;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 12px 24px;
+      margin: 0 10px;
+      transition: background-color 0.3s, transform 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      font-weight: 600;
+    }
+
+    #video-controls button:hover {
+      background-color: #02c0a7;
+      transform: scale(1.1);
+    }
+
+    #footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #999;
+      animation: fadeIn 2s ease-out;
+    }
+
+    @media only screen and (max-width: 600px) {
+      #video-container {
+        width: 100%;
+        border-radius: 0;
+        padding: 10px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Random Shoti</h1>
+
+  <div id="video-container">
+    <div id="loading-spinner"></div>
+    <div id="progress-bar-container">
+      <div id="progress-bar"></div>
+    </div>
+    <video id="video" controls autoplay></video>
+    <div id="error-message"></div>
+    <button id="retry-button">Retry</button>
+    <div id="video-controls">
+      <button id="next-button">&#9654; Next</button>
+      <button id="play-pause-button">⏸️ Play/Pause</button>
+    </div>
+  </div>
+
+  <script>
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const progressBarContainer = document.getElementById('progress-bar-container');
+    const progressBar = document.getElementById('progress-bar');
+    const errorMessage = document.getElementById('error-message');
+    const videoElement = document.getElementById('video');
+    const retryButton = document.getElementById('retry-button');
+    const videoTimeout = 10000; 
+
+    const videoCache = new Map();
+
+    async function getRandomVideo() {
+      try {
+        const url = 'https://shoti-srv1.onrender.com/api/v1/get';
+        if (videoCache.has(url)) {
+          videoElement.src = videoCache.get(url);
+          videoElement.style.display = 'block';
+          return;
+        }
+
+        loadingSpinner.style.display = 'block';
+        progressBarContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+        errorMessage.style.display = 'none';
+        retryButton.style.display = 'none';
+        videoElement.style.display = 'none';
+        errorMessage.style.opacity = '0';
+        retryButton.style.opacity = '0';
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), videoTimeout);
+
+        const rawResponse = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ apikey: "shoti-1hgn30msgapp542i0qg" }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!rawResponse.ok) {
+          throw new Error(`Server error: ${rawResponse.status}`);
+        }
+
+        rawResponse.body.onprogress = function (event) {
+          if (event.lengthComputable) {
+            const percentComplete = (event.loaded / event.total) * 100;
+            progressBar.style.width = percentComplete + '%';
+          }
+        };
+
+        const content = await rawResponse.json();
+        videoElement.src = content.data.url;
+        videoCache.set(url, content.data.url);
+        videoElement.style.display = 'block';
+        progressBar.style.width = '100%';
+      } catch (e) {
+        console.error("Error fetching Shoti video", e);
+        let errorMsg = "Failed to load video. Please try again later.";
+        if (e.name === 'AbortError') {
+          errorMsg = "Request timed out. Please try again.";
+        } else if (e.message.includes('NetworkError')) {
+          errorMsg = "Network error. Please check your connection and try again.";
+        } else if (e.message.includes('Server error')) {
+          errorMsg = `Server error: ${e.message.split(':')[1]}. Please try again later.`;
+        }
+        errorMessage.textContent = errorMsg;
+        errorMessage.style.display = 'block';
+        retryButton.style.display = 'inline-block';
+        setTimeout(() => {
+          errorMessage.style.opacity = '1';
+          retryButton.style.opacity = '1';
+        }, 10);
+      } finally {
+        loadingSpinner.style.display = 'none';
+        progressBarContainer.style.display = 'none';
+      }
+    }
+
+    getRandomVideo();
+
+    document.getElementById('next-button').addEventListener('click', getRandomVideo);
+
+    document.getElementById('retry-button').addEventListener('click', getRandomVideo);
+
+    document.getElementById('play-pause-button').addEventListener('click', () => {
+      const video = document.getElementById('video');
+      if (video.paused) {
+        video.play();
+        document.getElementById('play-pause-button').innerHTML = '⏸️ Pause';
+      } else {
+        video.pause();
+        document.getElementById('play-pause-button').innerHTML = '▶️ Play';
+      }
+    });
+
+    document.getElementById('video').addEventListener('ended', getRandomVideo);
+  </script>
+</body>
+</html>
