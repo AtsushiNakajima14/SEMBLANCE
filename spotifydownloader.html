@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Downloader</title>
+  <link rel="icon" type="image/x-icon" href="https://r2.easyimg.io/f7xoem4pp/ab6775700000ee8517821cfc70e5c4a4d89006b0.jpg">
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #e9ecef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+      margin-bottom: 120px;
+      position: relative;
+    }
+
+    h1 {
+      color: #444;
+      font-size: 24px;
+      margin-bottom: 25px;
+    }
+
+    p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 24px);
+      padding: 14px;
+      margin-bottom: 25px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      color: #444;
+    }
+
+    button {
+      background-color: #28a745;
+      border: none;
+      color: #fff;
+      padding: 16px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.3s, transform 0.3s;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    button:active {
+      background-color: #1e7e34;
+      transform: scale(0.97);
+    }
+
+    .error-message {
+      color: #dc3545;
+      margin-top: 15px;
+    }
+
+    .spinner {
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-top: 5px solid #28a745;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin: 20px auto 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      background-color: #e9ecef;
+      border-radius: 6px;
+      overflow: hidden;
+      display: none;
+      margin-bottom: 25px;
+    }
+
+    .progress-bar {
+      height: 20px;
+      width: 0%;
+      background-color: #28a745;
+      transition: width 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Download Spotify Songs</h1>
+  <p>Once the MP3 is downloaded, make sure you have a Music Player on your Device.</p>
+  <input type="text" id="song-title" placeholder="Enter a music title">
+  <button id="btn">Download</button>
+  <div class="spinner" id="spinner"></div>
+  <div class="progress-bar-container" id="progressBarContainer">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="error-message" id="error-message" style="display: none;"></div>
+</div>
+
+<script>
+  const url = "https://deku-rest-api-3ijr.onrender.com/spotify?q=";
+  const btn = document.getElementById("btn");
+  const songTitle = document.getElementById("song-title");
+  const errorMessage = document.getElementById("error-message");
+  const spinner = document.getElementById("spinner");
+  const progressBarContainer = document.getElementById("progressBarContainer");
+  const progressBar = document.getElementById("progressBar");
+
+  async function download() {
+    const song = songTitle.value.trim();
+    if (!song) {
+      errorMessage.textContent = "Please enter a music title";
+      errorMessage.style.display = "block";
+      return;
+    }
+
+    try {
+      spinner.style.display = "block"; 
+      const response = await fetch(url + encodeURIComponent(song));
+      const data = await response.json();
+
+      if (data.result) {
+        spinner.style.display = "none";
+
+        const link = document.createElement("a");
+        link.href = data.result;
+        link.download = `${song}.mp3`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        errorMessage.style.display = "none";
+      } else {
+        throw new Error("No download link available");
+      }
+    } catch (error) {
+      errorMessage.textContent = "An error occurred while fetching the download link";
+      errorMessage.style.display = "block";
+      console.error(error);
+    } finally {
+      spinner.style.display = "none";
+    }
+  }
+
+  btn.addEventListener("click", download);
+</script>
+</body>
+</html>
