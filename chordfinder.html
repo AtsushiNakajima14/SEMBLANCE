@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Chord Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #80deea);
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            margin: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.5s ease-in-out;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #00796b;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #00796b;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #004d40;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #00796b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            background-color: #004d40;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button:active {
+            background-color: #00251a;
+            transform: scale(0.97);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading img {
+            width: 50px;
+            height: 50px;
+        }
+
+        #chordResults {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 16px;
+            word-wrap: break-word;
+            overflow-x: auto;
+            position: relative;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        #chordResults p {
+            margin: 10px 0;
+        }
+
+        #chordResults pre {
+            white-space: pre-wrap;
+        }
+
+        .copy-button {
+            padding: 8px 16px;
+            background-color: #00796b;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .copy-button:hover {
+            background-color: #004d40;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-button:focus {
+            outline: none;
+        }
+
+        .copy-button:active {
+            background-color: #00251a;
+            transform: scale(0.97);
+        }
+
+        .recommendation-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #00796b;
+        }
+
+        .recommendation-text a {
+            color: #00796b;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .recommendation-text a:hover {
+            color: #004d40;
+            text-shadow: 0 0 10px rgba(0, 77, 64, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            input[type="text"] {
+                width: calc(100% - 22px);
+            }
+
+            button, .copy-button {
+                width: calc(100% - 22px);
+            }
+
+            #chordResults {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Song Chord Finder</h1>
+        <input type="text" id="songInput" placeholder="Enter song name..." aria-label="Song Name">
+        <button onclick="searchChords()" aria-label="Search Chords">Search Music</button>
+        <div class="loading" id="loading">
+            <img src="https://i.imgur.com/llF5iyg.gif" alt="Loading...">
+        </div>
+        <div id="chordResults" role="region" aria-live="polite"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function searchChords() {
+            const song = document.getElementById('songInput').value.trim();
+            const chordResults = document.getElementById('chordResults');
+            const loading = document.getElementById('loading');
+
+            chordResults.innerHTML = '';
+            loading.style.display = 'block';
+
+            if (!song) {
+                loading.style.display = 'none';
+                chordResults.innerHTML = '<p>Please enter a song name.</p>';
+                return;
+            }
+
+            try {
+                const response = await axios.get('https://deku-rest-api-3ijr.onrender.com/search/chords?q=' + song);
+                const data = response.data;
+
+                loading.style.display = 'none';
+
+                if (data.error) {
+                    chordResults.innerHTML = '<p>No chords found.</p>';
+                    return;
+                }
+
+                const { title, artist, key, type, chords } = data.chord;
+                chordResults.innerHTML = `
+                    <p><strong>Title:</strong> ${title}</p>
+                    <p><strong>Artist:</strong> ${artist}</p>
+                    <p><strong>Key:</strong> ${key}</p>
+                    <p><strong>Type:</strong> ${type}</p>
+                    <p><strong>Chords:</strong></p>
+                    <pre>${chords}</pre>
+                    <button class="copy-button" onclick="copyChords()">Copy Chords</button>
+                   <p class="recommendation-text">Recommended to copy the chords and paste it on <a href="https://hastebin.com/" target="_blank">Hastebin.com</a>, which you can also share with someone.</p>
+
+                `;
+            } catch (error) {
+                loading.style.display = 'none';
+                chordResults.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+
+        function copyChords() {
+            const chords = document.querySelector('#chordResults pre').innerText;
+            navigator.clipboard.writeText(chords).then(() => {
+                alert("Chords copied to clipboard");
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
