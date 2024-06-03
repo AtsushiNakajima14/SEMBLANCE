@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to Link Uploader</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #3498db, #9b59b6);
+      font-family: Arial, sans-serif;
+      margin: 0; 
+      color: #000; 
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+      position: relative; 
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #000; 
+    }
+
+    .upload-area {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .result {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .result img {
+      max-width: 100%;
+      max-height: 200px; 
+      cursor: pointer; 
+      border-radius: 5px; 
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); 
+      transition: transform 0.3s ease; 
+    }
+
+    .result img:hover {
+      transform: scale(1.05); 
+    }
+
+    .result #link {
+      margin-top: 10px; 
+      font-size: 14px; 
+      color: #000; 
+    }
+
+    .artB-upload {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease; 
+      margin-top: 20px; 
+      animation: pulse 2s infinite;
+      font-size: 16px; 
+    }
+
+    .artB-upload:hover {
+      background-color: #0056b3; 
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+      }
+
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+      }
+
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+      }
+    }
+
+    .drag-drop-area {
+     width: 100%; 
+     height: 200px; 
+     background-color: rgba(255, 255, 255, 0.5); 
+     border: 2px dashed #fff; 
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     cursor: pointer;
+     transition: border-color 0.3s ease; 
+     border-radius: 10px; 
+     color: #000; 
+   }
+
+   .drag-drop-area:hover {
+     border-color: #fff; 
+   }
+
+    #file-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Image to Link Uploader</h1>
+    <div class="upload-area">
+      <div class="drag-drop-area" onclick="uploadImage()">
+        <span>Drag & Drop or Click to Upload Image</span>
+      </div>
+      <input type="file" id="file-input">
+    </div>
+    <div class="result" id="article-C">
+      <p id="link"></p>
+    </div>
+    <button class="artB-upload" id="submitBtn" onclick="submitImage()">Submit</button>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    function uploadImage() {
+      document.getElementById('file-input').click();
+    }
+
+    document.getElementById('file-input').addEventListener('change', function() {
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        img.onclick = function() {
+          window.open(img.src);
+        };
+        document.getElementById('article-C').innerHTML = ''; 
+        document.getElementById('article-C').appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function copy() {
+      let link = document.getElementById('link').textContent;
+      navigator.clipboard.writeText(link);
+    }
+
+    function submitImage() {
+      if (is_disabled() === true) {
+        console.log('Not Available')
+      } else {
+        fetchData()
+      }
+    }
+
+    function is_disabled() {
+      const btn = document.querySelector('.artB-upload');
+      if (btn.hasAttribute('disabled')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function get_image_link(url) {
+      var btn = document.querySelector('.btn-upload');
+      var submit = document.querySelector('.artB-upload');
+      var link = document.querySelector('#article-C');
+      var p = document.createElement('p'); 
+      p.id = 'link'; 
+      var url = url;
+      p.innerHTML = url;
+      link.appendChild(p); 
+      submit.removeAttribute('disabled'); 
+      submit.classList.remove('loading'); 
+    }
+
+    function fetchData() {
+      var submitBtn = document.getElementById('submitBtn');
+      submitBtn.setAttribute('disabled', ''); 
+      submitBtn.classList.add('loading'); 
+      var file = document.getElementById('file-input');
+      var form = new FormData();
+      form.append("image", file.files[0])
+
+      var settings = {
+        "url": "https://api.imgbb.com/1/upload?key=35cf9f5cc0b00be80e423ddeead3d8d6",
+        "method": "POST",
+        "timeout": 0,
+        "processData": false,
+        "mimeType": "multipart/form-data",
+        "contentType": false,
+        "data": form
+      };
+
+      $.ajax(settings).done(function(response) {
+        let data = JSON.parse(response);
+        let ki = data.data.url;
+        get_image_link(ki)
+        file.value = ''
+      }).always(function() {
+        submitBtn.removeAttribute('disabled'); 
+        submitBtn.classList.remove('loading'); 
+      });
+    }
+  </script>
+</body>
+</html>
