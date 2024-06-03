@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook Video Downloader</title>
+  <link rel="icon" type="image/x-icon" href="https://r2.easyimg.io/vnwoy530m/1657548367facebook-logo.png">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4334777342745440" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .logo-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1877f2;
+      margin-bottom: 25px;
+    }
+
+    .input-container {
+      margin-bottom: 25px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 24px);
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+      background-color: #f7f7f7;
+    }
+
+    button {
+      background-color: #1877f2;
+      border: none;
+      color: white;
+      padding: 16px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      width: 100%;
+      margin-top: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #145eab;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    button:focus {
+      outline: none;
+      background-color: #0a3c77;
+    }
+
+    button:active {
+      background-color: #0c3067;
+      transform: scale(0.95);
+    }
+
+    .spinner-container {
+      display: none;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .progress-container {
+      display: none;
+      width: 100%;
+      margin-top: 20px;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 20px;
+      width: 0%;
+      background-color: #3498db;
+      border-radius: 8px;
+      transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    }
+
+    .error-message {
+      color: #f44336;
+      margin-top: 15px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo-title">Facebook Video Downloader</div>
+  <div class="input-container">
+    <input type="text" id="videoUrl" placeholder="Paste your Facebook video URL here">
+  </div>
+  <button onclick="downloadVideo()">Download</button>
+  <div class="spinner-container" id="spinnerContainer">
+    <div class="spinner"></div>
+  </div>
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="error-message" id="errorMessage"></div>
+</div>
+
+<script>
+  async function downloadVideo() {
+    const videoUrl = document.getElementById('videoUrl').value.trim();
+    const errorMessage = document.getElementById('errorMessage');
+    const spinnerContainer = document.getElementById('spinnerContainer');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+
+    errorMessage.textContent = '';
+    spinnerContainer.style.display = 'flex';
+    progressContainer.style.display = 'none';
+
+    if (!videoUrl) {
+      errorMessage.textContent = 'Please provide a valid Facebook video URL';
+      spinnerContainer.style.display = 'none';
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://hoanghao.me/api/facebook/download?url=${encodeURIComponent(videoUrl)}`);
+      const { data } = await response.json();
+
+      if (!data || !data.video || !data.title) {
+        throw new Error('Invalid response from the server');
+      }
+
+      const video = data.video;
+      const title = data.title;
+
+      const videoResponse = await fetch(video);
+      const videoBlob = await videoResponse.blob();
+
+      const blobUrl = window.URL.createObjectURL(videoBlob);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `${title}.mp4`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+      errorMessage.textContent = `Download complete: ${title}`;
+    } catch (error) {
+      errorMessage.textContent = `Error downloading Facebook video: ${error}`;
+      console.error(error);
+    } finally {
+      spinnerContainer.style.display = 'none';
+      progressContainer.style.display = 'none';
+    }
+  }
+</script>
+</body>
+</html>
