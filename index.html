@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SemBlance AI</title>
+    <link rel="icon" type="image/x-icon" href="https://r2.easyimg.io/py4d95dyk/25694.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            scroll-behavior: smooth;
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .preloader .spinner {
+            width: 50px;
+            height: 50px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .toggle-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .toggle-container button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .toggle-container button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        main {
+            max-width: 800px;
+            text-align: center;
+            padding: 20px;
+            background-color: #2e2e2e;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        h2 {
+            color: #f5f5f5;
+            margin-bottom: 20px;
+            font-size: 36px;
+            transition: color 0.3s;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .links a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #fff;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            border-radius: 10px;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            width: 160px;
+            text-align: center;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 1s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .links a:hover {
+            background: linear-gradient(135deg, #66BB6A, #43A047);
+            transform: scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .dark-mode {
+            background-color: #f5f5f5;
+            color: #1e1e1e;
+        }
+
+        .dark-mode main {
+            background-color: #e0e0e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .links a {
+            background: linear-gradient(135deg, #607D8B, #455A64);
+            color: #fff;
+        }
+
+        .dark-mode .links a:hover {
+            background: linear-gradient(135deg, #78909C, #546E7A);
+        }
+
+        .dark-mode footer {
+            background-color: #455A64;
+            color: #fff;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .toggle-container button {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+
+        .dark-mode h2 {
+            color: #1e1e1e;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: #2e2e2e;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            text-align: left;
+            color: #f5f5f5;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #888;
+            padding-bottom: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-container button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            main {
+                padding: 15px;
+            }
+
+            .links a {
+                padding: 12px 15px;
+                font-size: 14px;
+                width: 140px;
+            }
+
+            .modal-content {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .toggle-container button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            main {
+                padding: 10px;
+            }
+
+            .links a {
+                padding: 10px 12px;
+                font-size: 12px;
+                width: 120px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            footer p {
+                font-size: 12px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .links a {
+                width: 180px;
+                font-size: 18px;
+            }
+
+            .toggle-container button {
+                font-size: 18px;
+                padding: 12px 24px;
+            }
+
+            h2 {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="preloader" id="preloader">
+    <div class="spinner"></div>
+</div>
+
+<div class="toggle-container">
+    <button id="toggle-button" aria-label="Toggle dark mode">Toggle Dark Mode</button>
+</div>
+
+<div class="container">
+    <main role="main">
+        <h2>Welcome to SemBlance AI</h2>
+        <h3>Developed by Cyril Dev | API by Joshua Sy</h3>
+        
+        <div class="links">
+            <a href="#" aria-label="Contact Developer" id="contact-link">Contact Developer</a>
+            <a href="aigirlfriend.html" aria-label="AI Girlfriend (NSFW)">AI Girlfriend (NSFW)</a>
+            <a href="liner.html" aria-label="Linerva Pro">Linerva Pro</a>
+            <a href="semblancegpt.html" aria-label="SemBlanceGPT 4">SemBlance GPT 4</a>
+            <a href="semblance.html" aria-label="SemBlance GPT 3.5">SemBlance GPT 3.5</a>
+            <a href="palm.html" aria-label="PaLM 2">PaLM 2</a>
+            <a href="deku.html" aria-label="Deku AI">Deku AI</a>
+            <a href="blackbox.html" aria-label="Blackbox AI">Blackbox AI</a>
+            <a href="claude.html" aria-label="Claude 3">Claude 3</a>
+            <a href="shoti.html" aria-label="Random Shoti">Random Shoti</a>
+            <a href="chordfinder.html" aria-label="Song Chord Finder">Song Chord Finder</a>
+            <a href="imagesearch.html" aria-label="Image Search">Image Search</a>
+            <a href="imagetolink.html" aria-label="Image to Link Uploader">Image to Link Uploader</a>
+            <a href="videodownloader.html" aria-label="Facebook Video Downloader">Facebook Video Downloader</a>
+            <a href="tiktokdownloader.html" aria-label="TikTok Video Downloader">TikTok Video Downloader</a>
+            <a href="spotifydownloader.html" aria-label="Spotify Music Downloader">Spotify Music Downloader</a>
+        </div>
+    </main>
+
+    <footer role="contentinfo">
+        <p>&copy; 2024 SemBlance AI. Cyril Matt O. Encenso.</p>
+    </footer>
+
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Contact Developer</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Email: Amigohaycyril10@gmail.com</p>
+            <p>Phone: +639670530865</p>
+            <p>Facebook: Cyril Matt O. Encenso</p>
+            <p>Instagram: Cyyydev</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        const container = document.querySelector('.container');
+        preloader.style.display = 'none';
+        container.style.display = 'flex';
+    });
+
+    const toggleButton = document.getElementById('toggle-button');
+    toggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+            toggleButton.textContent = 'Dark Mode';
+        } else {
+            toggleButton.textContent = 'Light Mode';
+        }
+    });
+
+    window.addEventListener('load', () => {
+        if (document.body.classList.contains('dark-mode')) {
+            toggleButton.textContent = 'Dark Mode';
+        } else {
+            toggleButton.textContent = 'Light Mode';
+        }
+    });
+
+    const modal = document.getElementById('contactModal');
+    const contactLink = document.getElementById('contact-link');
+    const closeBtn = document.getElementsByClassName('close')[0];
+
+    contactLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        modal.classList.add('show');
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.classList.remove('show');
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.classList.remove('show');
+        }
+    });
+</script>
+
+</body>
+</html>
