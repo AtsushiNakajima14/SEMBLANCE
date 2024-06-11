@@ -1,4 +1,4 @@
-# SEMBLANCE AI by Cyril Matt O. Encenso
+# SEMBLANCE by Cyril Matt O. Encenso
 
 ● Developed by Cyril Matt O. Encenso, and APIs by Joshua Sy.
 
