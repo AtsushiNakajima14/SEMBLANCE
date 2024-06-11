@@ -12,8 +12,8 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
             overflow-x: hidden;
             transition: background-color 0.3s, color 0.3s;
             scroll-behavior: smooth;
@@ -25,18 +25,19 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #121212;
+            background-color: #1e1e1e;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            animation: fadeIn 0.5s ease;
         }
 
         .preloader .spinner {
             width: 50px;
             height: 50px;
             border: 6px solid #f3f3f3;
-            border-top: 6px solid #ff5722;
+            border-top: 6px solid #4CAF50;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -52,7 +53,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 40px;
+            padding: 20px;
             box-sizing: border-box;
         }
 
@@ -63,50 +64,53 @@
         }
 
         .toggle-container button {
-            background-color: #ff5722;
-            color: #ffffff;
+            background-color: #4CAF50;
+            color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 10px;
             cursor: pointer;
-            border-radius: 25px;
-            font-size: 16px;
+            border-radius: 5px;
+            font-size: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-            animation: buttonFadeIn 1s ease-in-out;
         }
 
         .toggle-container button:hover {
-            background-color: #e64a19;
+            background-color: #45a049;
             transform: scale(1.05);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        @keyframes buttonFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         main {
             max-width: 800px;
             text-align: center;
             padding: 20px;
-            background-color: #1f1f1f;
-            border-radius: 10px;
+            background-color: #2e2e2e;
+            border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, box-shadow 0.3s;
-            margin: 20px;
+            margin: 40px 0;
         }
 
-        h1, h2 {
-            color: #ffffff;
+        .logo {
+            width: 100px;
             margin-bottom: 20px;
-            font-size: 2rem;
+        }
+
+        h1 {
+            color: #f5f5f5;
+            margin-bottom: 20px;
+            font-size: 32px;
             transition: color 0.3s;
             animation: fadeIn 1s ease-in-out;
         }
 
         h2 {
-            font-size: 1.5rem;
+            color: #f5f5f5;
+            margin-bottom: 20px;
+            font-size: 28px;
+            transition: color 0.3s;
+            animation: fadeIn 1s ease-in-out;
         }
 
         @keyframes fadeIn {
@@ -121,50 +125,55 @@
         }
 
         .tabs button {
-            background-color: #ff5722;
-            color: #ffffff;
+            background-color: #4CAF50;
+            color: #fff;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            border-radius: 25px;
-            font-size: 16px;
-            margin: 0 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 0 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
         }
 
         .tabs button:hover {
-            background-color: #e64a19;
+            background-color: #45a049;
             transform: scale(1.05);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
 
         .tabs button.active {
-            background-color: #ff7043;
+            background-color: #66BB6A;
         }
 
         .links {
             display: none;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(20px);
         }
 
         .links.active {
             display: flex;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .links a {
             display: block;
-            padding: 15px 20px;
+            padding: 10px 20px;
             text-decoration: none;
-            color: #ffffff;
-            background: linear-gradient(135deg, #ff5722, #e64a19);
+            color: #fff;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
             border-radius: 10px;
             transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
             text-align: center;
-            font-size: 16px;
+            font-size: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             animation: slideIn 1s ease-in-out;
         }
@@ -175,19 +184,17 @@
         }
 
         .links a:hover {
-            background: linear-gradient(135deg, #ff7043, #d84315);
+            background: linear-gradient(135deg, #66BB6A, #43A047);
             transform: scale(1.05);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
 
         footer {
             background-color: #333;
-            color: #ffffff;
+            color: #fff;
             text-align: center;
-            padding: 10px 0;
+            padding: 20px 0;
             width: 100%;
-            position: fixed;
-            bottom: 0;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, box-shadow 0.3s;
         }
@@ -198,8 +205,8 @@
         }
 
         .dark-mode {
-            background-color: #ffffff;
-            color: #121212;
+            background-color: #f5f5f5;
+            color: #1e1e1e;
         }
 
         .dark-mode main {
@@ -217,7 +224,7 @@
 
         .dark-mode .links a {
             background: linear-gradient(135deg, #607D8B, #455A64);
-            color: #ffffff;
+            color: #fff;
         }
 
         .dark-mode .links a:hover {
@@ -226,17 +233,17 @@
 
         .dark-mode footer {
             background-color: #455A64;
-            color: #ffffff;
+            color: #fff;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .dark-mode .toggle-container button {
-            background-color: #121212;
-            color: #ffffff;
+            background-color: #1e1e1e;
+            color: #fff;
         }
 
         .dark-mode h1, .dark-mode h2 {
-            color: #121212;
+            color: #1e1e1e;
         }
 
         .modal {
@@ -251,7 +258,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             padding-top: 60px;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease;
         }
 
         .modal.show {
@@ -260,19 +267,19 @@
         }
 
         .modal-content {
-            background-color: #1f1f1f;
+            background-color: #2e2e2e;
             margin: 5% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
             max-width: 500px;
-            border-radius: 10px;
+            border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
             text-align: left;
-            color: #ffffff;
+            color: #f5f5f5;
             transform: translateY(-50px);
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
         }
 
         .modal.show .modal-content {
@@ -285,6 +292,10 @@
             align-items: center;
             border-bottom: 1px solid #888;
             padding-bottom: 10px;
+        }
+
+        .modal-body {
+            padding-top: 10px;
         }
 
         .close {
@@ -305,7 +316,7 @@
         @media (max-width: 768px) {
             .toggle-container button {
                 padding: 8px 16px;
-                font-size: 14px;
+                font-size: 12px;
             }
 
             main {
@@ -314,12 +325,12 @@
 
             .tabs button {
                 padding: 8px 16px;
-                font-size: 14px;
+                font-size: 12px;
             }
 
             .links a {
-                padding: 12px 15px;
-                font-size: 14px;
+                padding: 10px 15px;
+                font-size: 12px;
             }
 
             .modal-content {
@@ -329,7 +340,7 @@
 
         @media (max-width: 480px) {
             .toggle-container button {
-                padding: 6px 12px;
+                padding: 8px 12px;
                 font-size: 12px;
             }
 
@@ -338,17 +349,21 @@
             }
 
             .tabs button {
-                padding: 6px 12px;
+                padding: 8px 12px;
                 font-size: 12px;
             }
 
             .links a {
-                padding: 10px 12px;
+                padding: 10px 15px;
                 font-size: 12px;
             }
 
-            h1, h2 {
-                font-size: 28px;
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
             }
 
             footer p {
@@ -358,17 +373,21 @@
 
         @media (min-width: 1024px) {
             .links a {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .toggle-container button,
             .tabs button {
-                font-size: 18px;
+                font-size: 16px;
                 padding: 12px 24px;
             }
 
-            h1, h2 {
-                font-size: 36px;
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 24px;
             }
         }
     </style>
@@ -385,8 +404,9 @@
 
 <div class="container">
     <main role="main">
-        <h1 class="animate__animated animate__fadeInDown">Welcome to SemBlance AI</h1>
-        <h2 class="animate__animated animate__fadeInUp">Developed by Cyril Dev | API by Joshua Sy</h2>
+        <img src="https://i.ibb.co/QQ3PNNN/6056254-200.png" alt="SemBlance Logo" class="logo">
+        <h1 class="animate__animated animate__fadeInDown">Welcome to SemBlance</h1>
+        <h2 class="animate__animated animate__fadeInUp">Developed by Cyril Dev</h2>
 
         <div class="tabs" role="tablist">
             <button role="tab" aria-selected="true" aria-controls="tools" id="tools-tab" class="active">Tools</button>
@@ -394,6 +414,7 @@
         </div>
 
         <div id="tools" class="links active" role="tabpanel" aria-labelledby="tools-tab">
+            <a href="https://facebook-boost-reacts.vercel.app/" aria-label="Facebook React Boost" title="Spam Reaction on Facebook">Facebook React Boost</a>
             <a href="spotifydownloader.html" aria-label="Spotify Music Downloader" title="Download music from Spotify">Spotify Music Downloader</a>
             <a href="tiktokdownloader.html" aria-label="TikTok Video Downloader" title="Download videos from TikTok">TikTok Video Downloader</a>
             <a href="videodownloader.html" aria-label="Facebook Video Downloader" title="Download videos from Facebook">Facebook Video Downloader</a>
@@ -425,14 +446,19 @@
     <div id="contactModal" class="modal" role="dialog" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Contact Developer</h2>
-                <span class="close" role="button" aria-label="Close contact form">&times;</span>
+                <span class="close" aria-label="Close">&times;</span>
+                <h2>Contact Us</h2>
             </div>
             <div class="modal-body">
-                <p>Email: Amigohaycyril10@gmail.com</p>
-                <p>Phone: +639670530865</p>
-                <p>Facebook: Cyril Matt O. Encenso</p>
-                <p>Instagram: Cyyydev</p>
+                <form id="contactForm" aria-label="Contact Form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required aria-required="true" aria-label="Name"><br><br>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required aria-required="true" aria-label="Email"><br><br>
+                    <label for="message">Message:</label><br>
+                    <textarea id="message" name="message" required aria-required="true" aria-label="Message"></textarea><br><br>
+                    <button type="submit" aria-label="Submit">Submit</button>
+                </form>
             </div>
         </div>
     </div>
@@ -470,13 +496,7 @@
     });
 
     const modal = document.getElementById('contactModal');
-    const contactLink = document.getElementById('contact-link');
     const closeBtn = document.getElementsByClassName('close')[0];
-
-    contactLink.addEventListener('click', (event) => {
-        event.preventDefault();
-        modal.classList.add('show');
-    });
 
     closeBtn.addEventListener('click', () => {
         modal.classList.remove('show');
@@ -486,6 +506,20 @@
         if (event.target === modal) {
             modal.classList.remove('show');
         }
+    });
+
+    modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.classList.remove('show');
+        }
+    });
+
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        alert('Form submitted!');
+        modal.classList.remove('show');
+        contactForm.reset();
     });
 </script>
 </body>
