@@ -82,7 +82,7 @@
         }
 
         main {
-            max-width: 800px;
+            max-width: 800px
             text-align: center;
             padding: 20px;
             background-color: #2e2e2e;
@@ -90,41 +90,75 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, box-shadow 0.3s;
             margin: 40px 0;
-        }
+            }
 
-        .logo {
-            width: 100px;
+            .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
             margin-bottom: 20px;
-        }
+            animation: rotateLogo 5s linear infinite;
+            position: relative;
+            }
 
-        h1 {
+            @keyframes rotateLogo {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+            }
+
+            .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            }
+
+            .logo img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            }
+
+            h1 {
             color: #f5f5f5;
             margin-bottom: 20px;
             font-size: 32px;
             transition: color 0.3s;
             animation: fadeIn 1s ease-in-out;
-        }
+            }
 
-        h2 {
+            h2 {
             color: #f5f5f5;
             margin-bottom: 20px;
             font-size: 28px;
             transition: color 0.3s;
             animation: fadeIn 1s ease-in-out;
-        }
+            }
 
-        @keyframes fadeIn {
+            @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
+            }
 
-        .tabs {
+            .tabs {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
-        }
+            }
 
-        .tabs button {
+            .tabs button {
             background-color: #4CAF50;
             color: #fff;
             border: none;
@@ -135,19 +169,19 @@
             margin: 0 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-        }
+            }
 
-        .tabs button:hover {
+            .tabs button:hover {
             background-color: #45a049;
             transform: scale(1.05);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
+            }
 
-        .tabs button.active {
+            .tabs button.active {
             background-color: #66BB6A;
-        }
+            }
 
-        .links {
+            .links {
             display: none;
             flex-direction: column;
             gap: 15px;
@@ -156,15 +190,15 @@
             opacity: 0;
             transition: opacity 0.5s ease, transform 0.5s ease;
             transform: translateY(20px);
-        }
+            }
 
-        .links.active {
+            .links.active {
             display: flex;
             opacity: 1;
             transform: translateY(0);
-        }
+            }
 
-        .links a {
+            .links a {
             display: block;
             padding: 10px 20px;
             text-decoration: none;
@@ -176,20 +210,20 @@
             font-size: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             animation: slideIn 1s ease-in-out;
-        }
+            }
 
-        @keyframes slideIn {
+            @keyframes slideIn {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
-        }
+            }
 
-        .links a:hover {
+            .links a:hover {
             background: linear-gradient(135deg, #66BB6A, #43A047);
             transform: scale(1.05);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
+            }
 
-        footer {
+            footer {
             background-color: #333;
             color: #fff;
             text-align: center;
@@ -197,56 +231,56 @@
             width: 100%;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, box-shadow 0.3s;
-        }
+            }
 
-        footer p {
+            footer p {
             margin: 0;
             font-size: 14px;
-        }
+            }
 
-        .dark-mode {
+            .dark-mode {
             background-color: #f5f5f5;
             color: #1e1e1e;
-        }
+            }
 
-        .dark-mode main {
+            .dark-mode main {
             background-color: #e0e0e0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+            }
 
-        .dark-mode .tabs button {
+            .dark-mode .tabs button {
             background-color: #607D8B;
-        }
+            }
 
-        .dark-mode .tabs button.active {
+            .dark-mode .tabs button.active {
             background-color: #78909C;
-        }
+            }
 
-        .dark-mode .links a {
+            .dark-mode .links a {
             background: linear-gradient(135deg, #607D8B, #455A64);
             color: #fff;
-        }
+            }
 
-        .dark-mode .links a:hover {
+            .dark-mode .links a:hover {
             background: linear-gradient(135deg, #78909C, #546E7A);
-        }
+            }
 
-        .dark-mode footer {
+            .dark-mode footer {
             background-color: #455A64;
             color: #fff;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-        }
+            }
 
-        .dark-mode .toggle-container button {
+            .dark-mode .toggle-container button {
             background-color: #1e1e1e;
             color: #fff;
-        }
+            }
 
-        .dark-mode h1, .dark-mode h2 {
+            .dark-mode h1, .dark-mode h2 {
             color: #1e1e1e;
-        }
+            }
 
-        .modal {
+            .modal {
             display: none;
             position: fixed;
             z-index: 1001;
@@ -259,14 +293,14 @@
             padding-top: 60px;
             opacity: 0;
             transition: opacity 0.5s ease;
-        }
+            }
 
-        .modal.show {
+            .modal.show {
             display: block;
             opacity: 1;
-        }
+            }
 
-        .modal-content {
+            .modal-content {
             background-color: #2e2e2e;
             margin: 5% auto;
             padding: 20px;
@@ -280,40 +314,40 @@
             color: #f5f5f5;
             transform: translateY(-50px);
             transition: transform 0.5s ease;
-        }
+            }
 
-        .modal.show .modal-content {
+            .modal.show .modal-content {
             transform: translateY(0);
-        }
+            }
 
-        .modal-header {
+            .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #888;
             padding-bottom: 10px;
-        }
+            }
 
-        .modal-body {
+            .modal-body {
             padding-top: 10px;
-        }
+            }
 
-        .close {
+            .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-        }
+            }
 
-        .close:hover,
-        .close:focus {
+            .close:hover,
+            .close:focus {
             color: #000;
             text-decoration: none;
             cursor: pointer;
-        }
+            }
 
-        @media (max-width: 768px) {
+            @media (max-width: 768px) {
             .toggle-container button {
                 padding: 8px 16px;
                 font-size: 12px;
@@ -336,9 +370,9 @@
             .modal-content {
                 width: 90%;
             }
-        }
+            }
 
-        @media (max-width: 480px) {
+            @media (max-width: 480px) {
             .toggle-container button {
                 padding: 8px 12px;
                 font-size: 12px;
@@ -369,9 +403,9 @@
             footer p {
                 font-size: 12px;
             }
-        }
+            }
 
-        @media (min-width: 1024px) {
+            @media (min-width: 1024px) {
             .links a {
                 font-size: 16px;
             }
@@ -389,31 +423,35 @@
             h2 {
                 font-size: 24px;
             }
-        }
-    </style>
-</head>
-<body>
+            }
+            </style>
+            </head>
+            <body>
 
-<div class="preloader" id="preloader" role="alert" aria-live="assertive">
-    <div class="spinner" role="status" aria-label="Loading"></div>
-</div>
+            <div class="preloader" id="preloader" role="alert" aria-live="assertive">
+            <div class="spinner" role="status" aria-label="Loading"></div>
+            </div>
 
-<div class="toggle-container">
-    <button id="toggle-button" aria-label="Toggle dark mode">Toggle Dark Mode</button>
-</div>
+            <div class="toggle-container">
+            <button id="toggle-button" aria-label="Toggle dark mode">Toggle Dark Mode</button>
+            </div>
 
-<div class="container">
-    <main role="main">
-        <img src="https://i.ibb.co/QQ3PNNN/6056254-200.png" alt="SemBlance Logo" class="logo">
-        <h1 class="animate__animated animate__fadeInDown">Welcome to SemBlance</h1>
-        <h2 class="animate__animated animate__fadeInUp">Developed by Cyril Dev</h2>
+            <div class="container">
+            <main role="main">
+            <div class="logo-container">
+            <div class="logo">
+                <img src="https://i.ibb.co/QQ3PNNN/6056254-200.png" alt="SemBlance Logo">
+            </div>
+            </div>
+            <h1 class="animate__animated animate__fadeInDown">Welcome to SemBlance</h1>
+            <h2 class="animate__animated animate__fadeInUp">Developed by Cyril Encenso</h2>
 
-        <div class="tabs" role="tablist">
+            <div class="tabs" role="tablist">
             <button role="tab" aria-selected="true" aria-controls="tools" id="tools-tab" class="active">Tools</button>
             <button role="tab" aria-selected="false" aria-controls="ais" id="ais-tab">AIs</button>
-        </div>
+            </div>
 
-        <div id="tools" class="links active" role="tabpanel" aria-labelledby="tools-tab">
+            <div id="tools" class="links active" role="tabpanel" aria-labelledby="tools-tab">
             <a href="https://facebook-reaction-boost.onrender.com/" aria-label="Facebook React Boost" title="Spam Reaction on Facebook">Facebook React Boost</a>
             <a href="instagramdownloader.html" aria-label="Instagram Video Downloader" title="Download videos from Instagram">Instagram Video Downloader</a>
             <a href="spotifydownloader.html" aria-label="Spotify Music Downloader" title="Download music from Spotify">Spotify Music Downloader</a>
@@ -423,9 +461,9 @@
             <a href="imagetolink.html" aria-label="Image to Link Uploader" title="Upload images and get shareable links">Image to Link Uploader</a>
             <a href="imagesearch.html" aria-label="Image Search" title="Search for images online">Image Search</a>
             <a href="chordfinder.html" aria-label="Music Chord Finder" title="Find music Chords online">Music Chord Finder</a>
-        </div>
+            </div>
 
-        <div id="ais" class="links" role="tabpanel" aria-labelledby="ais-tab">
+            <div id="ais" class="links" role="tabpanel" aria-labelledby="ais-tab">
             <a href="deku.html" aria-label="Deku AI" title="Access Deku AI">Deku AI</a>
             <a href="blackbox.html" aria-label="Blackbox AI" title="Access Blackbox AI">Blackbox AI</a>
             <a href="claude.html" aria-label="Claude 3" title="Access Claude 3">Claude 3</a>
@@ -438,15 +476,15 @@
             <a href="hermes.html" aria-label="Nous Hermes 2" title="Access Nous Hermes 2">Nous Hermes 2</a>
             <a href="semblancegpt.html" aria-label="SemBlanceGPT 4" title="Access SemBlanceGPT 4">SemBlance GPT 4</a>
             <a href="semblance.html" aria-label="SemBlance GPT 3.5" title="Access SemBlance GPT 3.5">SemBlance GPT 3.5</a>
-        </div>
-    </main>
+            </div>
+            </main>
 
-    <footer role="contentinfo">
-        <p>&copy; 2024 SemBlance AI. Cyril Matt O. Encenso.</p>
-    </footer>
+            <footer role="contentinfo">
+            <p>&copy; 2024 SemBlance AI. Cyril Matt O. Encenso.</p>
+            </footer>
 
-    <div id="contactModal" class="modal" role="dialog" aria-modal="true">
-        <div class="modal-content">
+            <div id="contactModal" class="modal" role="dialog" aria-modal="true">
+            <div class="modal-content">
             <div class="modal-header">
                 <span class="close" aria-label="Close">&times;</span>
                 <h2>Contact Us</h2>
@@ -462,29 +500,29 @@
                     <button type="submit" aria-label="Submit">Submit</button>
                 </form>
             </div>
-        </div>
-    </div>
-</div>
+            </div>
+            </div>
+            </div>
 
-<script>
-    window.addEventListener('load', () => {
-        const preloader = document.getElementById('preloader');
-        const container = document.querySelector('.container');
-        preloader.style.display = 'none';
-        container.style.display = 'flex';
-    });
+            <script>
+            window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            const container = document.querySelector('.container');
+            preloader.style.display = 'none';
+            container.style.display = 'flex';
+            });
 
-    const toggleButton = document.getElementById('toggle-button');
-    toggleButton.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-    });
+            const toggleButton = document.getElementById('toggle-button');
+            toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+            });
 
-    const tabs = document.querySelectorAll('.tabs button');
-    const tabPanels = document.querySelectorAll('.links');
+            const tabs = document.querySelectorAll('.tabs button');
+            const tabPanels = document.querySelectorAll('.links');
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
+            tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
 
@@ -494,35 +532,35 @@
                     panel.classList.add('active');
                 }
             });
-        });
-    });
+            });
+            });
 
-    const modal = document.getElementById('contactModal');
-    const closeBtn = document.getElementsByClassName('close')[0];
+            const modal = document.getElementById('contactModal');
+            const closeBtn = document.getElementsByClassName('close')[0];
 
-    closeBtn.addEventListener('click', () => {
-        modal.classList.remove('show');
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
+            closeBtn.addEventListener('click', () => {
             modal.classList.remove('show');
-        }
-    });
+            });
 
-    modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
+            window.addEventListener('click', (event) => {
+            if (event.target === modal) {
             modal.classList.remove('show');
-        }
-    });
+            }
+            });
 
-    const contactForm = document.getElementById('contactForm');
-    contactForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        alert('Form submitted!');
-        modal.classList.remove('show');
-        contactForm.reset();
-    });
-</script>
-</body>
-</html>
+            modal.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+            modal.classList.remove('show');
+            }
+            });
+
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            alert('Form submitted!');
+            modal.classList.remove('show');
+            contactForm.reset();
+            });
+            </script>
+            </body>
+            </html>
