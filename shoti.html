@@ -224,12 +224,14 @@
     const videoElement = document.getElementById('video');
     const retryButton = document.getElementById('retry-button');
     const progressBar = document.getElementById('progress-bar');
-    const videoTimeout = 10000; 
+    const progressBarContainer = document.getElementById('progress-bar-container');
+    const videoTimeout = 10000;
 
     async function getRandomVideo() {
       try {
         loadingSpinner.style.display = 'block';
         progressBar.style.width = '0';
+        progressBarContainer.style.display = 'block';
         errorMessage.style.display = 'none';
         retryButton.style.display = 'none';
         videoElement.style.display = 'none';
@@ -305,6 +307,9 @@
     });
 
     document.getElementById('video').addEventListener('ended', getRandomVideo);
+    document.getElementById('video').addEventListener('play', () => {
+      progressBarContainer.style.display = 'none';
+    });
   </script>
 </body>
 </html>
