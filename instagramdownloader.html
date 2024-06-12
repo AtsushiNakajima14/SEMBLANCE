@@ -164,7 +164,7 @@
 
     try {
       spinnerContainer.style.display = 'flex';
-      errorMessage.textContent = ''; // Clear previous errors
+      errorMessage.textContent = ''; 
 
       const response = await fetch(apiUrl);
 
@@ -182,11 +182,9 @@
       progressContainer.style.display = 'block';
       progressBar.style.width = '100%';
 
-      // Fetch the video as a blob
       const videoResponse = await fetch(videoUrl);
       const videoBlob = await videoResponse.blob();
 
-      // Download the video blob
       downloadVideoBlob(videoBlob, 'video.mp4');
 
       document.getElementById('videoUrl').value = "";
