@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Video Downloader</title>
+  <link rel="icon" type="image/x-icon" href="https://r2.easyimg.io/vnwoy530m/1657548367facebook-logo.png">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4334777342745440" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+      animation: fadeIn 0.5s ease-in-out;
+      border: 1px solid #ddd;
+    }
+
+    .logo-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #d32f2f;
+      margin-bottom: 25px;
+    }
+
+    .input-container {
+      margin-bottom: 25px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 24px);
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+      background-color: #f9f9f9;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      background-color: #d32f2f;
+      border: none;
+      color: white;
+      padding: 16px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      width: 100%;
+      margin-top: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #b71c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    button:focus {
+      outline: none;
+      background-color: #9a0007;
+    }
+
+    button:active {
+      background-color: #7f0000;
+      transform: scale(0.95);
+    }
+
+    .spinner-container {
+      display: none;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-top: 5px solid #d32f2f;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .progress-container {
+      display: none;
+      width: 100%;
+      margin-top: 20px;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 20px;
+      width: 0%;
+      background-color: #d32f2f;
+      border-radius: 8px;
+      transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    }
+
+    .error-message {
+      color: #d32f2f;
+      margin-top: 15px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo-title">Instagram Video Downloader</div>
+  <div class="input-container">
+    <input type="text" id="videoUrl" placeholder="Paste your Instagram video URL here">
+  </div>
+  <button onclick="GetReels()">Download</button>
+  <div class="spinner-container" id="spinnerContainer">
+    <div class="spinner"></div>
+  </div>
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="error-message" id="errorMessage"></div>
+</div>
+
+<script>
+  async function GetReels() {
+    const url = document.getElementById('videoUrl').value.trim();
+    const apiUrl = "https://deku-rest-api-3ijr.onrender.com/api/instadl?url=" + url;
+
+    const spinnerContainer = document.getElementById('spinnerContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressContainer = document.getElementById('progressContainer');
+    const errorMessage = document.getElementById('errorMessage');
+
+    try {
+      spinnerContainer.style.display = 'flex';
+      errorMessage.textContent = ''; // Clear previous errors
+
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch video URL. Please check your URL and try again.');
+      }
+
+      const responseData = await response.json();
+      const videoUrl = responseData.result;
+
+      if (!videoUrl) {
+        throw new Error('Video URL not found in the response. Please check your URL and try again.');
+      }
+
+      progressContainer.style.display = 'block';
+      progressBar.style.width = '100%';
+
+      // Fetch the video as a blob
+      const videoResponse = await fetch(videoUrl);
+      const videoBlob = await videoResponse.blob();
+
+      // Download the video blob
+      downloadVideoBlob(videoBlob, 'video.mp4');
+
+      document.getElementById('videoUrl').value = "";
+    } catch (error) {
+      console.error('Error fetching video:', error);
+      errorMessage.textContent = error.message;
+    } finally {
+      spinnerContainer.style.display = 'none';
+    }
+  }
+
+  function downloadVideoBlob(blob, filename) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>
