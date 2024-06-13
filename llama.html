@@ -225,7 +225,7 @@
     });
 
     async function getBotResponse(userInput) {
-        let url = `https://deku-rest-api-3ijr.onrender.com/api/llama-3-70b?q=${userInput}`;
+        let url = `https://deku-rest-api-ywad.onrender.com/api/llama-3-70b?q=${userInput}`;
         let response = await fetch(url);
         if (!response.ok) {
             throw new Error('Network response was not ok');
