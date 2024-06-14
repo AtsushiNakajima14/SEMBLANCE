@@ -9,7 +9,7 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #1d2b64, #f8cdda);
+      background-color: #f0f0f0;
       color: #333;
       line-height: 1.6;
       margin: 0;
@@ -18,16 +18,25 @@
 
     .container {
       max-width: 800px;
-      margin: 20px auto;
+      margin: 40px auto;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
+      background-color: #fff; 
+      animation: fadein 1s, fadeout 1s 4s; 
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeout {
+      from { opacity: 1; }
+      to { opacity: 0; }
     }
 
     .header {
-      background-color: transparent;
-      color: #fff;
       text-align: center;
       padding: 30px 0;
       border-radius: 10px 10px 0 0;
@@ -36,7 +45,7 @@
     .header h1 {
       font-size: 36px;
       margin: 0;
-      color: #333;
+      color: #333; 
     }
 
     .header p {
@@ -96,11 +105,12 @@
       display: flex;
       align-items: center;
       margin-bottom: 20px;
+      position: relative;
     }
 
     .user-input {
       flex: 1;
-      padding: 12px;
+      padding: 12px 50px 12px 12px;
       border: none;
       border-radius: 30px;
       font-size: 16px;
@@ -115,19 +125,28 @@
       box-shadow: 0 0 6px rgba(0, 0, 255, 0.5);
     }
 
-    .send-button {
-      padding: 12px 30px;
-      border: none;
-      background: linear-gradient(135deg, #3498db, #2980b9);
-      color: #fff;
-      border-radius: 30px;
+    .send-icon {
+      position: absolute;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      background: #fff; 
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      font-size: 16px;
       transition: background-color 0.3s ease;
     }
 
-    .send-button:hover {
-      background: linear-gradient(135deg, #2980b9, #3498db);
+    .send-icon:hover {
+      background: #ddd; 
+    }
+
+    .send-icon img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%; 
     }
 
     .copy-icon {
@@ -150,20 +169,22 @@
 </head>
 <body>
   <div class="header">
-    <h1>SemBlance Deku</h1>
+    <h1>SemBlance Deku AI</h1>
     <p>Made and designed by <a href="https://www.facebook.com/cyril.pumdal">Cyril Encenso</a></p>
   </div>
   <div class="container" id="container"></div>
   <div class="container">
     <div class="input-container">
       <textarea id="user-input" class="user-input" placeholder="Message Semblance..." rows="2"></textarea>
-      <button id="send-button" class="send-button">Send</button>
+      <div id="send-icon" class="send-icon" role="button" tabindex="0" aria-label="Send message">
+        <img src="https://i.ibb.co/Drv7Dhh/17-175309-jpg-free-download-paper-plane-icon-free-paper.jpg" alt="Send">
+      </div>
     </div>
   </div>
 
   <script>
     let c = document.getElementById('container');
-    let button = document.getElementById('send-button');
+    let sendIcon = document.getElementById('send-icon');
     let input = document.getElementById('user-input');
     let randomNumber = Math.floor(Math.random() * 1000) + 50;
 
@@ -180,7 +201,7 @@
 
         let userMessage = document.createElement('div');
         userMessage.classList.add('message', 'user-message');
-        userMessage.innerHTML = `<div>${userInput}</div>`;
+        userMessage.innerHTML = `<div>${userInput.replace(/\n/g, '<br>')}</div>`;
         c.appendChild(userMessage);
         c.scrollTop = c.scrollHeight;
 
@@ -216,7 +237,13 @@
         c.scrollTop = c.scrollHeight;
     }
 
-    button.addEventListener('click', sendMessage);
+    sendIcon.addEventListener('click', sendMessage);
+    sendIcon.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            sendMessage();
+        }
+    });
+
     input.addEventListener('keypress', function(event) {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
