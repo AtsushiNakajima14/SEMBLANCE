@@ -1,6 +1,6 @@
 # SEMBLANCE by Cyril Matt O. Encenso
 
-● Developed by Cyril Matt O. Encenso, and APIs by Joshua Sy.
+● Developed by Cyril Matt O. Encenso, and some of the APIs by Joshua Sy.
 
 ● This is the latest source code update of SemBlance AI. 
 
