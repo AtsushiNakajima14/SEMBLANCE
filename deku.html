@@ -6,6 +6,8 @@
   <title>SemBlance Deku AI</title>
   <link rel="icon" type="image/x-icon" href="https://r2.easyimg.io/on1orzpao/chatgpt_logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -22,7 +24,9 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background-color: #fff; 
+      background-color: #fff;
+      overflow-y: auto;
+      max-height: 70vh;
     }
 
     .header {
@@ -106,7 +110,8 @@
       transition: box-shadow 0.3s ease;
       background-color: #f9f9f9;
       color: #333;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-height: 100px;
+      overflow-y: auto;
     }
 
     .user-input:focus {
@@ -144,7 +149,7 @@
       right: 5px;
       width: 24px;
       height: 24px;
-      background-image: url("https://i.imgur.com/ZRHnuKN.png");
+      background-image: url("https://i.ibb.co/mHsWbYW/images.png");
       background-size: cover;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -153,6 +158,18 @@
 
     .copy-icon:hover {
       transform: scale(1.1);
+    }
+
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -164,7 +181,7 @@
   <div class="container" id="container"></div>
   <div class="container">
     <div class="input-container">
-      <textarea id="user-input" class="user-input" placeholder="Message Semblance..." rows="2"></textarea>
+      <textarea id="user-input" class="user-input" placeholder="Message Semblance..." rows="4"></textarea>
       <div id="send-icon" class="send-icon" role="button" tabindex="0" aria-label="Send message">
         <img src="https://i.ibb.co/Drv7Dhh/17-175309-jpg-free-download-paper-plane-icon-free-paper.jpg" alt="Send">
       </div>
@@ -172,10 +189,13 @@
   </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      hljs.highlightAll();
+    });
+
     let c = document.getElementById('container');
     let sendIcon = document.getElementById('send-icon');
     let input = document.getElementById('user-input');
-    let randomNumber = Math.floor(Math.random() * 1000) + 50;
 
     let initialMessage = document.createElement('div');
     initialMessage.classList.add('message', 'bot-message');
@@ -183,14 +203,20 @@
     initialMessage.innerHTML = "How can I help you today?";
     c.appendChild(initialMessage);
 
+    function sanitizeInput(input) {
+        let div = document.createElement('div');
+        div.innerText = input;
+        return div.innerHTML;
+    }
+
     async function sendMessage() {
         let userInput = input.value;
-        if (!userInput.trim()) return;
+        if (!userInput.trim() || userInput.length > 10000) return; 
         input.value = '';
 
         let userMessage = document.createElement('div');
         userMessage.classList.add('message', 'user-message');
-        userMessage.innerHTML = `<div>${userInput.replace(/\n/g, '<br>')}</div>`;
+        userMessage.innerHTML = `<div>${sanitizeInput(userInput).replace(/\n/g, '<br>')}</div>`;
         c.appendChild(userMessage);
         c.scrollTop = c.scrollHeight;
 
@@ -219,6 +245,10 @@
             });
             botMessage.appendChild(copyIcon);
             c.appendChild(botMessage);
+
+            botMessage.querySelectorAll('pre code').forEach((block) => {
+              hljs.highlightBlock(block);
+            });
         } catch (error) {
             console.error('Error:', error.message);
             processingMessage.innerHTML = `<div class="message-content">Error: ${error.message}</div>`;
