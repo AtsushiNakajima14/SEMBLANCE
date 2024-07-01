@@ -271,7 +271,7 @@
     });
 
     async function getBotResponse(userInput) {
-        let url = `https://deku-rest-api-gadz.onrender.com/api/liner?q=${userInput}`;
+        let url = `https://joshweb.click/docs/api/liner?q=${userInput}`;
         let response = await fetch(url);
         if (!response.ok) {
             throw new Error('Network response was not ok');
