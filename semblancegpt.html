@@ -271,7 +271,7 @@
     });
 
 async function getBotResponse(userInput) {
-        let url = `https://deku-rest-api-gadz.onrender.com/gpt4?prompt=${userInput}&uid=${randomNumber}`;
+        let url = `https://joshweb.click/docs/gpt?prompt=${userInput}&uid=${randomNumber}`;
         let response = await fetch(url);
         if (!response.ok) {
             throw new Error('Network response was not ok');
