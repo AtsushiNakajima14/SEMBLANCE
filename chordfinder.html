@@ -226,7 +226,7 @@
             }
 
             try {
-                const response = await axios.get('https://joshweb.click/docs/search/chords?q=' + song);
+                const response = await axios.get('https://joshweb.click/search/chords?q=' + song);
                 const data = response.data;
 
                 loading.style.display = 'none';
